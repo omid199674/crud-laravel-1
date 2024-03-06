@@ -1,0 +1,80 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Http\Requests\{{modelName}}Request;
+use App\Models\{{modelName}};
+
+class {{modelName}}Controller extends Controller
+
+{
+    public function index()
+    {
+         ${{modelNamePluralLowerCase}} = {{modelName}}::orderBy('created_at', 'desc')->simplePaginate(15);
+         return response()->json([
+                  'result' => true,
+                  'data' => [
+                      'medicalCenters' => ${{modelNamePluralLowerCase}},
+                  ],
+                  'message' => 'دیتا ارسال شد'
+              ], 200);
+    }
+
+    public function store({{modelName}}Request $request)
+    {
+         ${{modelNameSingularLowerCase}} = {{modelName}}::create($request->all());
+         return response()->json([
+               'result' => true,
+               'data' => [
+                   'medicalCenters' => ${{modelNameSingularLowerCase}},
+               ],
+               'message' => 'ذخیره اطلاعات با موفقیت انجام شد.'
+           ], 200);
+    }
+    public function show({{modelName}} ${{modelName}})
+    {
+         return response()->json([
+                   'result' => true,
+                   'data' => [
+                       'medicalCenters' => ${{modelName}},
+                   ],
+                   'message' => 'اطلاعات ارسال شد.'
+               ], 200);
+    }
+    public function update({{modelName}}Request $request,{{modelName}} ${{modelName}})
+    {
+         ${{modelName}}->update($request->all());
+         return response()->json([
+                 'result' => true,
+                 'data' => [],
+                 'message' => 'ویرایش با موفقیت انجام شد.'
+             ], 200);
+    }
+    public function destroy({{modelName}} ${{modelName}})
+    {
+          ${{modelName}}->delete();
+          return response()->json([
+                   'result' => true,
+                   'data' => [],
+                   'message' => 'حذف رکورد با موفقیت انجام شد.'
+               ], 204);
+    }
+    public function status({{modelName}} ${{modelName}}){
+           ${{modelName}}->status = ${{modelName}}->status == 0 ? 1 : 0;
+           $result = ${{modelName}}->save();
+           if($result){
+                   if(${{modelName}}->status == 0){
+                       return response()->json(['status' => true, 'checked' => false]);
+                   }
+                   else{
+                       return response()->json(['status' => true, 'checked' => true]);
+                   }
+           }
+           else{
+               return response()->json(['status' => false]);
+           }
+
+       }
+}
+
+
